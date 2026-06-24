@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inbound Receptionist — Voice Test</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header>
+        <h1>Inbound Receptionist</h1>
+        <p class="subtitle">Phase 1 — browser voice test (OpenAI Realtime)</p>
+      </header>
+
+      <section class="card status-card">
+        <div id="status-dot" class="status-dot idle"></div>
+        <div>
+          <p id="status-label" class="status-label">Disconnected</p>
+          <p id="status-detail" class="status-detail">
+            Click start and allow microphone access to talk to the agent.
+          </p>
+        </div>
+      </section>
+
+      <section class="card controls">
+        <button id="start-btn" class="btn primary">Start call</button>
+        <button id="stop-btn" class="btn secondary" disabled>End call</button>
+      </section>
+
+      <section class="card log-card">
+        <h2>Activity</h2>
+        <div id="log" class="log"></div>
+      </section>
+    </main>
+
+    <audio id="remote-audio" autoplay></audio>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

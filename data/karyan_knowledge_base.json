@@ -1,0 +1,198 @@
+{
+  "company": {
+    "name": "Karyan",
+    "tagline": "Your trusted address in NCR",
+    "about": "Karyan is a premium real estate company headquartered in Ghaziabad, serving buyers across the entire NCR region — Ghaziabad, Noida, Greater Noida, Gurugram, Faridabad, and Delhi NCR corridors. We specialise in residential flats, villas, and plotted developments, and help clients book site visits with our sales team.",
+    "phone": "+91 120 456 7890",
+    "email": "hello@karyan.com",
+    "website": "www.karyan.com",
+    "office_address": "Karyan Tower, Raj Nagar Extension, Ghaziabad, Uttar Pradesh 201017",
+    "office_hours": "Mon–Sat 10:00 AM – 7:00 PM IST",
+    "sales_consultant": "Sara",
+    "service_areas": [
+      "Ghaziabad",
+      "Noida",
+      "Greater Noida",
+      "Gurugram",
+      "Faridabad",
+      "Delhi NCR"
+    ]
+  },
+  "properties": [
+    {
+      "id": "KR-101",
+      "name": "Karyan Heights",
+      "type": "apartment",
+      "location": "Raj Nagar Extension, Ghaziabad",
+      "bhk": "2 BHK",
+      "size_sqft": 1050,
+      "price_inr": 5200000,
+      "price_display": "₹52 Lakh",
+      "emi_from": "₹28,000/month",
+      "status": "available",
+      "possession": "Ready to move",
+      "floor": "10th of 16",
+      "facing": "East",
+      "amenities": ["Swimming pool", "Gym", "Covered parking", "Clubhouse", "24×7 security"],
+      "highlights": ["5 min from NH-58", "Near Raj Nagar Metro extension", "Modular kitchen"]
+    },
+    {
+      "id": "KR-102",
+      "name": "Karyan Heights",
+      "type": "apartment",
+      "location": "Raj Nagar Extension, Ghaziabad",
+      "bhk": "3 BHK",
+      "size_sqft": 1380,
+      "price_inr": 7100000,
+      "price_display": "₹71 Lakh",
+      "emi_from": "₹38,000/month",
+      "status": "available",
+      "possession": "Ready to move",
+      "floor": "7th of 16",
+      "facing": "Park",
+      "amenities": ["Swimming pool", "Gym", "Covered parking", "Clubhouse", "24×7 security"],
+      "highlights": ["Park-facing balcony", "2 car parks", "Gated township"]
+    },
+    {
+      "id": "KR-201",
+      "name": "Karyan Green Valley",
+      "type": "apartment",
+      "location": "Crossings Republik, Ghaziabad",
+      "bhk": "2 BHK",
+      "size_sqft": 980,
+      "price_inr": 4800000,
+      "price_display": "₹48 Lakh",
+      "emi_from": "₹26,000/month",
+      "status": "available",
+      "possession": "Mar 2027",
+      "floor": "Under construction",
+      "facing": "Green belt",
+      "amenities": ["Jogging track", "Kids play zone", "Power backup", "EV charging"],
+      "highlights": ["RERA approved", "Early-bird 3% discount", "20 min to Noida Sector 62"]
+    },
+    {
+      "id": "KR-202",
+      "name": "Karyan Green Valley",
+      "type": "apartment",
+      "location": "Crossings Republik, Ghaziabad",
+      "bhk": "3 BHK",
+      "size_sqft": 1280,
+      "price_inr": 6400000,
+      "price_display": "₹64 Lakh",
+      "emi_from": "₹34,000/month",
+      "status": "available",
+      "possession": "Mar 2027",
+      "floor": "Under construction",
+      "facing": "Club",
+      "amenities": ["Jogging track", "Kids play zone", "Power backup", "EV charging"],
+      "highlights": ["Best-selling layout", "Club view", "Pre-EMI till possession"]
+    },
+    {
+      "id": "KR-301",
+      "name": "Karyan Noida Express",
+      "type": "apartment",
+      "location": "Sector 150, Noida",
+      "bhk": "3 BHK",
+      "size_sqft": 1520,
+      "price_inr": 11500000,
+      "price_display": "₹1.15 Cr",
+      "emi_from": "₹55,000/month",
+      "status": "available",
+      "possession": "Ready to move",
+      "floor": "14th of 22",
+      "facing": "Golf course",
+      "amenities": ["Infinity pool", "Sky lounge", "Concierge", "Smart access"],
+      "highlights": ["Sector 150 green belt", "30 min to IGI Airport", "Premium fittings"]
+    },
+    {
+      "id": "KR-302",
+      "name": "Karyan Noida Express",
+      "type": "apartment",
+      "location": "Sector 150, Noida",
+      "bhk": "4 BHK",
+      "size_sqft": 2100,
+      "price_inr": 15800000,
+      "price_display": "₹1.58 Cr",
+      "emi_from": "₹74,000/month",
+      "status": "few_units_left",
+      "possession": "Ready to move",
+      "floor": "18th of 22",
+      "facing": "North-East",
+      "amenities": ["Infinity pool", "Sky lounge", "Concierge", "Smart access"],
+      "highlights": ["Large family layout", "Only 3 units left", "Servant room + utility"]
+    },
+    {
+      "id": "KR-401",
+      "name": "Karyan Grand Villas",
+      "type": "villa",
+      "location": "Greater Noida West",
+      "bhk": "4 BHK",
+      "size_sqft": 2850,
+      "price_inr": 14200000,
+      "price_display": "₹1.42 Cr",
+      "emi_from": "₹67,000/month",
+      "status": "available",
+      "possession": "Ready to move",
+      "floor": "G+2 villa",
+      "facing": "Garden",
+      "amenities": ["Private lawn", "Community pool", "Club membership", "Smart home"],
+      "highlights": ["Gated villa community", "15 min from Noida City Centre", "Independent entry"]
+    },
+    {
+      "id": "KR-501",
+      "name": "Karyan Gurugram Central",
+      "type": "apartment",
+      "location": "Dwarka Expressway, Gurugram",
+      "bhk": "2 BHK",
+      "size_sqft": 1180,
+      "price_inr": 9800000,
+      "price_display": "₹98 Lakh",
+      "emi_from": "₹46,000/month",
+      "status": "available",
+      "possession": "Dec 2026",
+      "floor": "Under construction",
+      "facing": "City",
+      "amenities": ["Rooftop deck", "Co-working space", "Retail plaza", "Power backup"],
+      "highlights": ["Dwarka Expressway front", "Cyber Hub 25 min", "Assured rental option"]
+    },
+    {
+      "id": "KR-601",
+      "name": "Karyan Urban Plots",
+      "type": "plot",
+      "location": "Sikandra, Ghaziabad",
+      "bhk": "N/A",
+      "size_sqft": 2000,
+      "price_inr": 3200000,
+      "price_display": "₹32 Lakh",
+      "emi_from": "₹15,500/month",
+      "status": "available",
+      "possession": "Immediate registration",
+      "floor": "Corner plot",
+      "facing": "East",
+      "amenities": ["Gated colony", "Underground drainage", "Street lighting"],
+      "highlights": ["GDA approved", "₹1,600/sqft all-inclusive", "Loan assistance available"]
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Which areas does Karyan serve?",
+      "answer": "We are based in Ghaziabad and actively serve the full NCR — Ghaziabad, Noida, Greater Noida, Gurugram, Faridabad, and key Delhi NCR corridors."
+    },
+    {
+      "question": "Does Karyan help with home loans?",
+      "answer": "Yes. We partner with HDFC, SBI, and ICICI for pre-approved loans. Our team can arrange a callback from a loan officer."
+    },
+    {
+      "question": "Are projects RERA registered?",
+      "answer": "All under-construction Karyan projects in Uttar Pradesh and Haryana are RERA registered. Registration numbers are shared during site visits."
+    },
+    {
+      "question": "Can I schedule a site visit?",
+      "answer": "Absolutely. Book a 30-minute property visit or virtual walkthrough with Sara or our sales team. We send a Google Calendar invite with a Google Meet link for virtual tours."
+    },
+    {
+      "question": "What is included in the price?",
+      "answer": "Prices typically include base cost, floor rise, and car park. Stamp duty, registration, and GST (if applicable) are extra. Exact breakup is shared on visit."
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+:root {
+  color-scheme: light dark;
+  --bg: #0f172a;
+  --card: #111827;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --accent: #38bdf8;
+  --accent-dark: #0ea5e9;
+  --danger: #f87171;
+  --success: #4ade80;
+  --border: #1f2937;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
+  background: radial-gradient(circle at top, #1e293b, var(--bg));
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+}
+
+header h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.9rem;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--muted);
+}
+
+.card {
+  background: color-mix(in srgb, var(--card) 92%, white 8%);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-top: 1rem;
+}
+
+.status-card {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.status-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot.idle {
+  background: var(--muted);
+}
+
+.status-dot.connecting {
+  background: #fbbf24;
+  box-shadow: 0 0 12px #fbbf24;
+}
+
+.status-dot.live {
+  background: var(--success);
+  box-shadow: 0 0 12px var(--success);
+}
+
+.status-dot.error {
+  background: var(--danger);
+  box-shadow: 0 0 12px var(--danger);
+}
+
+.status-label {
+  margin: 0;
+  font-weight: 600;
+}
+
+.status-detail {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.controls {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.8rem 1.25rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: #082f49;
+  font-weight: 600;
+}
+
+.btn.secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.log-card h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+.log {
+  max-height: 320px;
+  overflow-y: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.log-entry {
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.log-entry:last-child {
+  border-bottom: none;
+}
+
+.log-entry strong {
+  color: var(--text);
+}
