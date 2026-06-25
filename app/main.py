@@ -9,7 +9,9 @@ from app.config import settings
 from app.routes.auth import router as auth_router
 from app.routes.oauth import router as oauth_router
 from app.routes.session import router as session_router
+from app.routes.telephony import router as telephony_router
 from app.routes.tools import router as tools_router
+from app.routes.twilio import router as twilio_router
 from app.services.auth_service import init_db
 
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
@@ -28,6 +30,8 @@ app.include_router(auth_router)
 app.include_router(oauth_router)
 app.include_router(session_router)
 app.include_router(tools_router)
+app.include_router(telephony_router)
+app.include_router(twilio_router)
 
 
 @app.on_event("startup")
@@ -41,6 +45,10 @@ def health():
         "status": "ok",
         "timezone": settings.timezone,
         "booking_window_days": settings.booking_window_days,
+        "telephony": {
+            "mode": "elevenlabs_dashboard",
+            "webhook_ready": bool(settings.telephony_webhook_secret),
+        },
     }
 
 

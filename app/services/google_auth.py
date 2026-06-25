@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -19,16 +21,28 @@ ALL_SCOPES = [*CALENDAR_SCOPES, GMAIL_SEND_SCOPE]
 
 
 def _load_stored_credentials() -> Credentials | None:
+    if settings.google_token_json.strip():
+        try:
+            info = json.loads(settings.google_token_json)
+            return Credentials.from_authorized_user_info(info)
+        except json.JSONDecodeError:
+            pass
     if not settings.google_token_path.exists():
         return None
-    # Do not pass ALL_SCOPES here — that falsely marks ungranted scopes as present.
     return Credentials.from_authorized_user_file(str(settings.google_token_path))
+
+
+def _persist_credentials(creds: Credentials) -> None:
+    try:
+        settings.google_token_path.write_text(creds.to_json(), encoding="utf-8")
+    except OSError:
+        pass
 
 
 def _refresh_if_expired(creds: Credentials) -> Credentials:
     if creds.expired and creds.refresh_token:
         creds.refresh(Request())
-        settings.google_token_path.write_text(creds.to_json(), encoding="utf-8")
+        _persist_credentials(creds)
     return creds
 
 

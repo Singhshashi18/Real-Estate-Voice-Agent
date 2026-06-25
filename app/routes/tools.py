@@ -7,8 +7,7 @@ from app.models.schemas import (
     SearchPropertiesRequest,
     ValidateEmailRequest,
 )
-from app.services import calendar_service, knowledge_base
-from app.services.email_utils import validate_email
+from app.services.tool_executor import execute_tool
 
 router = APIRouter(prefix="/api/tools", tags=["tools"])
 
@@ -16,14 +15,7 @@ router = APIRouter(prefix="/api/tools", tags=["tools"])
 @router.post("/search-properties")
 def search_properties(payload: SearchPropertiesRequest):
     try:
-        return knowledge_base.search_properties(
-            location=payload.location,
-            bhk=payload.bhk,
-            property_type=payload.property_type,
-            max_budget_lakhs=payload.max_budget_lakhs,
-            budget=payload.budget,
-            query=payload.query,
-        )
+        return execute_tool("search_properties", payload.model_dump(exclude_none=True))
     except FileNotFoundError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
     except Exception as exc:
@@ -35,7 +27,7 @@ def search_properties(payload: SearchPropertiesRequest):
 @router.post("/get-property-details")
 def get_property_details(payload: PropertyDetailsRequest):
     try:
-        return knowledge_base.get_property_details(payload.property_id)
+        return execute_tool("get_property_details", {"property_id": payload.property_id})
     except FileNotFoundError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
     except Exception as exc:
@@ -46,13 +38,13 @@ def get_property_details(payload: PropertyDetailsRequest):
 
 @router.post("/validate-email")
 def validate_email_address(payload: ValidateEmailRequest):
-    return validate_email(payload.email)
+    return execute_tool("validate_email", {"email": payload.email})
 
 
 @router.post("/inventory-overview")
 def inventory_overview():
     try:
-        return knowledge_base.get_inventory_overview()
+        return execute_tool("get_inventory_overview", {})
     except FileNotFoundError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
 
@@ -60,8 +52,9 @@ def inventory_overview():
 @router.post("/check-availability")
 def check_availability(payload: AvailabilityRequest):
     try:
-        return calendar_service.check_availability(
-            payload.date, payload.preferred_time
+        return execute_tool(
+            "check_availability",
+            {"date": payload.date, "preferred_time": payload.preferred_time},
         )
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
@@ -76,14 +69,7 @@ def check_availability(payload: AvailabilityRequest):
 @router.post("/book-meeting")
 def book_meeting(payload: BookMeetingRequest):
     try:
-        return calendar_service.book_meeting(
-            payload.name,
-            payload.email,
-            payload.date,
-            payload.time,
-            property_id=payload.property_id,
-            property_name=payload.property_name,
-        )
+        return execute_tool("book_meeting", payload.model_dump(exclude_none=True))
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     except FileNotFoundError as exc:

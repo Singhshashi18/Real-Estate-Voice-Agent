@@ -43,12 +43,26 @@ class Settings(BaseSettings):
     google_credentials_path: Path = ROOT_DIR / "credentials.json"
     google_token_path: Path = ROOT_DIR / "token.json"
     google_calendar_id: str = "primary"
+    # Cloud deploy: paste contents of token.json as one-line JSON string
+    google_token_json: str = ""
 
     timezone: str = "Asia/Kolkata"
     meeting_duration_minutes: int = 30
     booking_window_days: int = 14
     business_start_hour: int = 9
     business_end_hour: int = 21  # last slot starts at 20:30
+
+    # Twilio (phone)
+    twilio_account_sid: str = ""
+    twilio_auth_token: str = ""
+    twilio_phone_number: str = ""
+
+    # ElevenLabs — agent/voice configured in dashboard; API key optional (voices helper)
+    elevenlabs_api_key: str = ""
+
+    # Protect /api/telephony/tools/* (set in ElevenLabs tool headers as Bearer token)
+    telephony_webhook_secret: str = ""
+    elevenlabs_webhook_secret: str = ""  # optional ElevenLabs-Signature validation
 
     @property
     def cors_origin_list(self) -> list[str]:

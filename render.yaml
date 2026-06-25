@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: inbound-agent-api
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: API_PUBLIC_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: TELEPHONY_WEBHOOK_SECRET
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ORGANIZER_NAME
+        value: Sara
+      - key: COMPANY_NAME
+        value: Karyan
+      - key: GOOGLE_TOKEN_JSON
+        sync: false
