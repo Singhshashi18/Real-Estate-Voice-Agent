@@ -22,5 +22,5 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@://github.com"
           git add daily_log.txt
-          git commit -m "chore: automatic daily update [skip ci]" || echo "No changes to commit"
+          git commit -m "docs: update log" || echo "No changes to commit"
           git push
