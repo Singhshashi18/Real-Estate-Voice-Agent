@@ -4,7 +4,7 @@
 <img width="1243" height="642" alt="image" src="https://github.com/user-attachments/assets/270c3b7a-8d2c-41f8-a0ad-d87d861dfd59" />
 <img width="1253" height="640" alt="image" src="https://github.com/user-attachments/assets/cbc340d4-5cfe-4174-a434-564363f7fce3" />
 <img width="1269" height="587" alt="image" src="https://github.com/user-attachments/assets/5aca08b1-92d8-471a-9680-77129be60357" />
-
+ 
 
 
 Phase 1 browser voice agent that schedules 30-minute meetings on your Google Calendar and sends calendar invites with Google Meet.
