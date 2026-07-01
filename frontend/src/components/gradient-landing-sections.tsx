@@ -14,6 +14,8 @@ import {
   Zap,
 } from "lucide-react";
 
+import { SlotMachineText } from "@/components/ui/slot-machine-text";
+
 const stats = [
   { value: "30s", label: "Response time", icon: Zap },
   { value: "24/7", label: "Voice availability", icon: Clock },
@@ -151,7 +153,13 @@ export function GradientLandingSections() {
                 className="group rounded-2xl border border-white/10 bg-gray-900/50 p-6 md:p-8 text-center hover:border-[#ff3c00]/30 hover:bg-[#ff3c00]/5 transition-all duration-300"
               >
                 <stat.icon className="h-5 w-5 text-[#ff3c00] mx-auto mb-4 opacity-80 group-hover:scale-110 transition-transform" />
-                <p className="text-3xl md:text-4xl font-bold mb-1">{stat.value}</p>
+                <p className="text-3xl md:text-4xl font-bold mb-1 min-h-[2.5rem] flex items-center justify-center">
+                  <SlotMachineText
+                    value={stat.value}
+                    maskClassName="from-gray-900"
+                    duration={1.4}
+                  />
+                </p>
                 <p className="text-sm text-gray-400">{stat.label}</p>
               </motion.div>
             ))}

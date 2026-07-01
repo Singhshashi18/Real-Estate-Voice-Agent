@@ -12,6 +12,8 @@ import {
   X,
 } from "lucide-react";
 
+import { SlotMachineLabel, SlotMachineText } from "@/components/ui/slot-machine-text";
+
 type AvatarProps = {
   imageSrc: string;
   delay: number;
@@ -46,7 +48,10 @@ const TrustElements: React.FC = () => {
         className="text-white animate-fadeIn whitespace-nowrap font-space"
         style={{ animationDelay: "800ms" }}
       >
-        <span className="text-[#ff3c00] font-semibold">2.4K+</span> meetings booked
+        <span className="text-[#ff3c00] font-semibold">
+          <SlotMachineText value="2.4K+" maskClassName="from-gray-900" duration={1.8} />
+        </span>{" "}
+        meetings booked
       </p>
     </div>
   );
@@ -131,34 +136,55 @@ const Navbar: React.FC = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-transparent py-6 px-6 md:px-12">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2 group">
             <Phone className="h-5 w-5 text-[#ff3c00]" />
             <span className="text-white font-bold text-xl tracking-tighter font-space">
-              Inbound Agent
+              <SlotMachineLabel
+                value="Inbound Agent"
+                maskClassName="from-gray-950"
+                duration={0.75}
+                baseDelay={0.1}
+              />
             </span>
           </Link>
 
           <div className="hidden md:flex items-center space-x-8">
-            {links.map((link) => (
+            {links.map((link, i) => (
               <a
                 key={link.href}
                 href={link.href}
                 className="text-gray-300 hover:text-[#ff3c00] transition-colors duration-300 font-space text-sm"
               >
-                {link.label}
+                <SlotMachineLabel
+                  value={link.label}
+                  maskClassName="from-gray-950"
+                  duration={0.7}
+                  baseDelay={0.25 + i * 0.12}
+                />
               </a>
             ))}
             <Link
               href="/login"
               className="text-gray-300 hover:text-white transition-colors font-space text-sm"
             >
-              Sign in
+              <SlotMachineLabel
+                value="Sign in"
+                maskClassName="from-gray-950"
+                duration={0.7}
+                baseDelay={0.75}
+              />
             </Link>
             <Link
               href="/signup"
               className="bg-white hover:bg-gray-100 text-black px-5 py-2 rounded-full transition-all duration-300 transform hover:scale-105 font-space text-sm font-semibold"
             >
-              Get started
+              <SlotMachineLabel
+                value="Get started"
+                maskClassName="from-white"
+                duration={0.65}
+                baseDelay={0.9}
+                className="text-black"
+              />
             </Link>
           </div>
 
@@ -177,24 +203,40 @@ const Navbar: React.FC = () => {
         {isMenuOpen && (
           <div className="md:hidden mt-4 bg-gray-900/95 backdrop-blur-sm rounded-lg p-4 animate-fadeIn border border-white/10">
             <div className="flex flex-col space-y-4">
-              {links.map((link) => (
+              {links.map((link, i) => (
                 <a
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsMenuOpen(false)}
                   className="text-gray-300 hover:text-white transition-colors py-2 font-space"
                 >
-                  {link.label}
+                  <SlotMachineLabel
+                    value={link.label}
+                    maskClassName="from-gray-900"
+                    duration={0.65}
+                    baseDelay={0.1 + i * 0.08}
+                  />
                 </a>
               ))}
               <Link href="/login" className="text-gray-300 py-2 font-space">
-                Sign in
+                <SlotMachineLabel
+                  value="Sign in"
+                  maskClassName="from-gray-900"
+                  duration={0.65}
+                  baseDelay={0.45}
+                />
               </Link>
               <Link
                 href="/signup"
                 className="bg-white text-black px-5 py-2 rounded-full text-center font-space font-semibold"
               >
-                Get started
+                <SlotMachineLabel
+                  value="Get started"
+                  maskClassName="from-white"
+                  duration={0.6}
+                  baseDelay={0.55}
+                  className="text-black"
+                />
               </Link>
             </div>
           </div>
