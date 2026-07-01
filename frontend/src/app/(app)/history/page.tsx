@@ -8,6 +8,7 @@ import {
   formatCallTime,
   formatDuration,
   getCallHistory,
+  subscribeCallHistory,
   type CallRecord,
 } from "@/lib/call-history";
 import { cn } from "@/lib/utils";
@@ -35,9 +36,7 @@ export default function HistoryPage() {
 
   useEffect(() => {
     setRecords(getCallHistory());
-    const onStorage = () => setRecords(getCallHistory());
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+    return subscribeCallHistory(() => setRecords(getCallHistory()));
   }, []);
 
   return (

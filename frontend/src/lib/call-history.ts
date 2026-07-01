@@ -9,6 +9,25 @@ export type CallRecord = {
 };
 
 const STORAGE_KEY = "inbound_agent_call_history";
+const HISTORY_EVENT = "inbound_agent_call_history_updated";
+
+function notifyHistoryChange() {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(HISTORY_EVENT));
+  }
+}
+
+export function subscribeCallHistory(listener: () => void) {
+  if (typeof window === "undefined") return () => {};
+  const onStorage = () => listener();
+  const onCustom = () => listener();
+  window.addEventListener("storage", onStorage);
+  window.addEventListener(HISTORY_EVENT, onCustom);
+  return () => {
+    window.removeEventListener("storage", onStorage);
+    window.removeEventListener(HISTORY_EVENT, onCustom);
+  };
+}
 
 export function getCallHistory(): CallRecord[] {
   if (typeof window === "undefined") return [];
@@ -22,6 +41,7 @@ export function getCallHistory(): CallRecord[] {
 
 export function saveCallHistory(records: CallRecord[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(records.slice(0, 100)));
+  notifyHistoryChange();
 }
 
 export function addCallRecord(record: CallRecord) {

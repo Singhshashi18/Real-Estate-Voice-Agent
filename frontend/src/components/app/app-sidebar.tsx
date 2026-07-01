@@ -7,6 +7,7 @@ import {
   ChevronLeft,
   ChevronRight,
   History,
+  LayoutDashboard,
   LogOut,
   Phone,
   PhoneIncoming,
@@ -19,6 +20,13 @@ import { cn } from "@/lib/utils";
 type AppSidebarProps = {
   collapsed: boolean;
   onToggle: () => void;
+};
+
+const overviewLink = {
+  href: "/dashboard",
+  label: "Dashboard",
+  icon: LayoutDashboard,
+  description: "Stats & analytics",
 };
 
 const agentLinks = [
@@ -41,6 +49,7 @@ const agentLinks = [
 export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const OverviewIcon = overviewLink.icon;
 
   return (
     <motion.aside
@@ -75,6 +84,37 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
       </div>
 
       <nav className="flex-1 space-y-6 overflow-y-auto p-3">
+        <div>
+          {!collapsed && (
+            <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest text-gray-600 font-space">
+              Overview
+            </p>
+          )}
+          <ul className="space-y-1">
+            <li>
+              <Link
+                href={overviewLink.href}
+                title={collapsed ? overviewLink.label : undefined}
+                className={cn(
+                  "flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors font-space",
+                  collapsed && "justify-center px-0",
+                  pathname === overviewLink.href
+                    ? "border border-[#ff3c00]/25 bg-[#ff3c00]/10 text-[#ff3c00]"
+                    : "text-gray-400 hover:bg-white/[0.04] hover:text-white",
+                )}
+              >
+                <OverviewIcon className="h-4 w-4 shrink-0" />
+                {!collapsed && (
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium">{overviewLink.label}</p>
+                    <p className="text-xs text-gray-500">{overviewLink.description}</p>
+                  </div>
+                )}
+              </Link>
+            </li>
+          </ul>
+        </div>
+
         <div>
           {!collapsed && (
             <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest text-gray-600 font-space">

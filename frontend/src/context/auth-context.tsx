@@ -11,6 +11,7 @@ import {
 import { useRouter } from "next/navigation";
 
 import { api, type User } from "@/lib/api";
+import { POST_AUTH_ROUTE } from "@/lib/routes";
 
 const TOKEN_KEY = "inbound_agent_token";
 
@@ -49,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async (email: string, password: string) => {
       const data = await api.login(email, password);
       persistSession(data.access_token, data.user);
-      router.push("/inbound");
+      router.push(POST_AUTH_ROUTE);
     },
     [persistSession, router],
   );
@@ -58,7 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async (name: string, email: string, password: string) => {
       const data = await api.register(name, email, password);
       persistSession(data.access_token, data.user);
-      router.push("/inbound");
+      router.push(POST_AUTH_ROUTE);
     },
     [persistSession, router],
   );
@@ -66,7 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const completeOAuth = useCallback(
     (accessToken: string, nextUser: User) => {
       persistSession(accessToken, nextUser);
-      router.push("/inbound");
+      router.push(POST_AUTH_ROUTE);
     },
     [persistSession, router],
   );
