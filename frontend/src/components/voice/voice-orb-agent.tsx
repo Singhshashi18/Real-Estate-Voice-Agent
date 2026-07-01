@@ -288,7 +288,7 @@ export function VoiceOrbAgent({
           type: "response.create",
           response: {
             output_modalities: ["audio"],
-            instructions: `Greet in English only as Sara from Karyan Realty NCR. Be energetic and cheerful. Say: "Hi there! Thanks so much for calling Karyan — I'm Sara! I'm really excited to help you find a great home in NCR. What are you looking for today?" Never use Hindi. Keep it warm and brief.`,
+            instructions: `Greet in English only as Sara from Karyan Realty NCR. High energy, bright and cheerful — speak with a smile. Say: "Hey there! You've reached Karyan — I'm Sara, and I'm so glad you called! Flats, villas, plots across NCR — let's find you something amazing. What are you looking for?" Never use Hindi. Keep it upbeat and brief.`,
           },
         });
       };
@@ -317,6 +317,9 @@ export function VoiceOrbAgent({
           }
           if (event.type === "input_audio_buffer.speech_stopped") {
             setStatusLabel("Agent is responding…");
+          }
+          if (event.type === "input_audio_buffer.timeout_triggered") {
+            setStatusLabel("Checking in with you…");
           }
           if (event.type === "response.audio.done" || event.type === "response.done") {
             if (pendingEndRef.current && !endCallTimerRef.current) {
