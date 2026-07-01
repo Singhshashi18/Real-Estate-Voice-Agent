@@ -288,7 +288,7 @@ export function VoiceOrbAgent({
           type: "response.create",
           response: {
             output_modalities: ["audio"],
-            instructions: `Greet in English only as Sara from Karyan Realty NCR. Say: "Hi, thank you for calling Karyan — I'm Sara. How can I help you find a home today?" Never use Hindi. Keep it warm and brief.`,
+            instructions: `Greet in English only as Sara from Karyan Realty NCR. Be energetic and cheerful. Say: "Hi there! Thanks so much for calling Karyan — I'm Sara! I'm really excited to help you find a great home in NCR. What are you looking for today?" Never use Hindi. Keep it warm and brief.`,
           },
         });
       };

@@ -9,7 +9,11 @@ from typing import Any
 import httpx
 
 from app.config import settings
-from app.services.openai_session import REALTIME_TOOLS, build_agent_instructions
+from app.services.openai_session import (
+    REALTIME_TOOLS,
+    build_agent_instructions,
+    build_first_message,
+)
 
 
 def verify_webhook_signature(payload: bytes, signature_header: str | None) -> bool:
@@ -106,10 +110,7 @@ def build_dashboard_setup_kit() -> dict[str, Any]:
         "agent": {
             "name_suggestion": f"{company} Receptionist — {agent_name}",
             "language": "en",
-            "first_message": (
-                f"Hi, thank you for calling {company}. I'm {agent_name}. "
-                "How can I help you find a home today?"
-            ),
+            "first_message": build_first_message(),
             "system_prompt": build_agent_instructions(),
         },
         "voice": {
