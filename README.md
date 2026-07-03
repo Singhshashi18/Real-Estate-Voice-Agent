@@ -98,6 +98,8 @@ Open [http://127.0.0.1:3001](http://127.0.0.1:3001) → sign up / log in → **I
 
 Agent personality and **voice are configured in the ElevenLabs dashboard**. This repo provides the **tool webhooks** (search, booking, calendar).
 
+> **Live number:** `+1 (661) 486-4467` is provisioned and **attached to the inbound agent**. Inbound calls route through Twilio (`voice_url → https://api.us.elevenlabs.io/twilio/inbound_call`) to the ElevenLabs Conversational AI agent. Status: `in-use` (voice + SMS enabled).
+
 **Start here:** [`docs/ELEVENLABS_CONNECT.md`](docs/ELEVENLABS_CONNECT.md)
 
 Short version:
