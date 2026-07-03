@@ -59,10 +59,17 @@ class Settings(BaseSettings):
 
     # ElevenLabs — agent/voice configured in dashboard; API key optional (voices helper)
     elevenlabs_api_key: str = ""
+    elevenlabs_outbound_agent_id: str = ""
+    elevenlabs_phone_number_id: str = ""
 
     # Protect /api/telephony/tools/* (set in ElevenLabs tool headers as Bearer token)
     telephony_webhook_secret: str = ""
     elevenlabs_webhook_secret: str = ""  # optional ElevenLabs-Signature validation
+
+    # HubSpot CRM lead source (private app access token)
+    hubspot_access_token: str = ""
+    # When leads sync from a CRM source, immediately start an outbound call
+    outbound_auto_call: bool = True
 
     @property
     def cors_origin_list(self) -> list[str]:

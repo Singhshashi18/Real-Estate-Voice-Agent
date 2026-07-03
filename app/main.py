@@ -7,12 +7,16 @@ from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 from app.routes.auth import router as auth_router
+from app.routes.leads import router as leads_router
 from app.routes.oauth import router as oauth_router
+from app.routes.outbound import router as outbound_router
 from app.routes.session import router as session_router
 from app.routes.telephony import router as telephony_router
 from app.routes.tools import router as tools_router
 from app.routes.twilio import router as twilio_router
 from app.services.auth_service import init_db
+from app.services.leads_service import init_leads_db
+from app.services.outbound_service import init_outbound_db
 
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
 
@@ -32,11 +36,15 @@ app.include_router(session_router)
 app.include_router(tools_router)
 app.include_router(telephony_router)
 app.include_router(twilio_router)
+app.include_router(outbound_router)
+app.include_router(leads_router)
 
 
 @app.on_event("startup")
 def on_startup():
     init_db()
+    init_outbound_db()
+    init_leads_db()
 
 
 @app.get("/api/health")
@@ -55,6 +63,16 @@ def health():
 @app.get("/legacy")
 def legacy_ui():
     return FileResponse(STATIC_DIR / "index.html")
+
+
+@app.get("/outbound")
+def outbound_ui():
+    return FileResponse(STATIC_DIR / "outbound.html")
+
+
+@app.get("/leads")
+def leads_ui():
+    return FileResponse(STATIC_DIR / "leads.html")
 
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")

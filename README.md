@@ -1,110 +1,110 @@
-# INBOUND-AGENT — Karyan Realty Voice Receptionist
+# Inbound Receptionist Agent
+<img width="1252" height="631" alt="image" src="https://github.com/user-attachments/assets/f9ed9a6c-0075-4634-9bee-4f007e335774" />
+<img width="1240" height="626" alt="image" src="https://github.com/user-attachments/assets/17365b73-c938-4370-8ced-72c8efd76b8a" />
+<img width="1243" height="642" alt="image" src="https://github.com/user-attachments/assets/270c3b7a-8d2c-41f8-a0ad-d87d861dfd59" />
+<img width="1253" height="640" alt="image" src="https://github.com/user-attachments/assets/cbc340d4-5cfe-4174-a434-564363f7fce3" />
+<img width="1269" height="587" alt="image" src="https://github.com/user-attachments/assets/5aca08b1-92d8-471a-9680-77129be60357" />
 
-AI voice receptionist **Sara** for **Karyan Realty** (NCR). Helps callers find properties, answer questions, and book site visits with Google Calendar + Meet invites.
 
-Two channels:
+
+AI voice receptionist **Sara** for **Karyan Realty** (NCR). Sara helps callers find properties, answers questions, and books 30-minute site visits on Google Calendar with **Google Meet** invites — over the **browser** and over the **phone**.
+
+## Channels
 
 | Channel | Voice | How |
-|---------|--------|-----|
-| **Browser** | OpenAI Realtime (`shimmer`) | Next.js app → WebRTC |
-| **Phone** | ElevenLabs (voice you pick) | Twilio number → ElevenLabs agent → backend webhooks |
+|---------|-------|-----|
+| **Browser (inbound)** | OpenAI Realtime (`shimmer`) | Next.js app → WebRTC |
+| **Phone (inbound)** | ElevenLabs (voice you pick) | Twilio number → ElevenLabs agent → backend webhooks |
+| **Phone (outbound)** | ElevenLabs (Sara, outbound persona) | CSV leads → ElevenLabs batch calling → Twilio |
+
+> **Live number:** `+1 (661) 486-4467` is provisioned and **attached to the agent**. Inbound calls route through Twilio (`voice_url → https://api.us.elevenlabs.io/twilio/inbound_call`) to the ElevenLabs Conversational AI agent, and the same number is used as caller ID for outbound follow-up calls. Status: `in-use` (voice + SMS enabled).
 
 No LangChain / LangGraph — OpenAI Realtime (browser) + ElevenLabs Conversational AI (phone), with plain Python tool services.
 
----
+## What it does
 
-## Features
-
-- Natural English receptionist (property search, budget in lakh/crore, BHK, NCR areas)
-- Karyan knowledge base (`data/karyan_knowledge_base.json`)
-- Google Calendar availability + booking (Mon–Fri 9 AM–9 PM IST)
-- Gmail confirmation after booking
-- JWT auth + dashboard UI (Next.js)
-- Phone agent: ElevenLabs tools → `/api/telephony/tools/*`
-
----
-
-## Tech stack
-
-**Backend:** Python, FastAPI, Uvicorn  
-**Frontend:** Next.js, React, TypeScript, Tailwind CSS  
-**Browser voice:** OpenAI Realtime API (WebRTC), Whisper  
-**Phone voice:** ElevenLabs Conversational AI + Twilio  
-**Integrations:** Google Calendar API, Gmail API, Google OAuth  
-
----
+1. Voice conversation in the browser (OpenAI Realtime API) or over the phone (ElevenLabs)
+2. Searches the Karyan knowledge base (property, budget in lakh/crore, BHK, NCR areas)
+3. Collects caller **name** and **email**
+4. Checks your Google Calendar availability (Mon–Fri, 9 AM–9 PM IST, up to 14 days ahead)
+5. Books the meeting and emails a **Google Calendar invite** with **Google Meet**
+6. **Outbound:** follows up on property leads via ElevenLabs batch calling (CSV upload)
 
 ## Prerequisites
 
 - Python 3.11+
 - Node.js 18+ (frontend)
-- OpenAI API key (Realtime access)
-- Google Cloud: Calendar API + Gmail API, `credentials.json`
-- **Phone (optional):** Twilio number, ElevenLabs account
+- OpenAI API key with Realtime API access
+- Google Cloud OAuth client credentials as `credentials.json` in the project root
+- Google Calendar API + Gmail API enabled for your project
+- **Phone (optional):** Twilio number, ElevenLabs account + API key
 
----
-
-## Quick start — local
-
-### 1. Backend
+## Setup
 
 ```bash
-cd INBOUND-AGENT
+cd INBOUND-AGENT 
 python -m venv .venv
-.venv\Scripts\activate          # Windows
+.venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Copy `.env.example` → `.env` and set at minimum:
+Copy `.env.example` to `.env` and set your values:
 
 ```env
 OPENAI_API_KEY=sk-...
 ORGANIZER_NAME=Sara
 COMPANY_NAME=Karyan
-JWT_SECRET=change-me
-FRONTEND_URL=http://127.0.0.1:3001
-API_PUBLIC_URL=http://127.0.0.1:8000
+
+# Phone (optional)
+TWILIO_ACCOUNT_SID=AC...
+TWILIO_AUTH_TOKEN=...
+TWILIO_PHONE_NUMBER=+16614864467
+
+# ElevenLabs (phone + outbound)
+ELEVENLABS_API_KEY=...
+ELEVENLABS_OUTBOUND_AGENT_ID=agent_...
+ELEVENLABS_PHONE_NUMBER_ID=phnum_...
+
+# Public URL for tool webhooks + Bearer secret for /api/telephony/tools/*
+API_PUBLIC_URL=https://your-public-url
+TELEPHONY_WEBHOOK_SECRET=your-strong-secret
 ```
 
-Place `credentials.json` in the project root. Authorize Google (one-time):
+Place your `credentials.json` in the project root (same folder as `.env`).
+
+Authorize Google Calendar (one-time — opens browser):
 
 ```bash
 python scripts/setup_google_auth.py
 ```
 
-Run API:
+This creates `token.json`.
+
+## Run locally
 
 ```bash
 uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-### 2. Frontend
+Open [http://127.0.0.1:8000](http://127.0.0.1:8000), click **Start call**, allow microphone access, and talk to the agent.
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
 
-Open [http://127.0.0.1:3001](http://127.0.0.1:3001) → sign up / log in → **Inbound** → talk to Sara.
+Example flow:
 
-### 3. Legacy browser UI (no auth)
+- "I'd like to book a meeting"
+- Agent asks for your name and email
+- "How about Thursday at 2 PM?" 
+- Agent checks availability, confirms, books, and sends the invite
 
-[http://127.0.0.1:8000/legacy](http://127.0.0.1:8000/legacy)
-
----
-
-## Phone agent — Twilio + ElevenLabs
+## Phone agent — Twilio + ElevenLabs (inbound)
 
 Agent personality and **voice are configured in the ElevenLabs dashboard**. This repo provides the **tool webhooks** (search, booking, calendar).
 
-> **Live number:** `+1 (661) 486-4467` is provisioned and **attached to the inbound agent**. Inbound calls route through Twilio (`voice_url → https://api.us.elevenlabs.io/twilio/inbound_call`) to the ElevenLabs Conversational AI agent. Status: `in-use` (voice + SMS enabled).
-
-**Start here:** [`docs/ELEVENLABS_CONNECT.md`](docs/ELEVENLABS_CONNECT.md)
+The Karyan number `+1 (661) 486-4467` is already imported into ElevenLabs and assigned to the inbound agent.
 
 Short version:
 
-1. Run backend (+ public URL if testing locally — see [`docs/PUBLIC_URL_SETUP.md`](docs/PUBLIC_URL_SETUP.md))
+1. Run backend (+ public URL if testing locally)
 2. Set `TELEPHONY_WEBHOOK_SECRET` in `.env`
 3. Run `python scripts/export_elevenlabs_setup.py` → copy from `data/elevenlabs_setup_kit.json`
 4. ElevenLabs → create agent, pick voice, paste prompt, add **6 webhook tools**
@@ -125,89 +125,84 @@ Authorization: Bearer YOUR_TELEPHONY_WEBHOOK_SECRET
 | `validate_email` | `POST /api/telephony/tools/validate_email` |
 | `book_meeting` | `POST /api/telephony/tools/book_meeting` |
 
-For a **fixed public URL** (no tunnel): [`docs/DEPLOY.md`](docs/DEPLOY.md) (Render / Docker).
+## Outbound agent — ElevenLabs batch calling
 
----
+Follow-up calls to property leads via **ElevenLabs batch calling** + Twilio (`+1 661 486 4467` as caller ID). Uses a **separate outbound ElevenLabs agent** with the Sara persona and a follow-up prompt.
+
+```
+CSV upload → FastAPI /api/outbound/campaigns
+    → ElevenLabs POST /v1/convai/batch-calling/submit
+    → Twilio dials each lead
+    → ElevenLabs outbound agent (Sara) → tool webhooks
+```
+
+Setup:
+
+1. `python scripts/export_elevenlabs_outbound_setup.py` → `data/elevenlabs_outbound_setup_kit.json`
+2. ElevenLabs → create a **separate outbound agent**, paste prompt + first message
+3. Add the same **6 webhook tools**, enable dynamic variables (`customer_name`, `customer_email`, `property_id`, `budget`, `area`, `notes`)
+4. Assign `+16614864467`, then set `ELEVENLABS_OUTBOUND_AGENT_ID` and `ELEVENLABS_PHONE_NUMBER_ID` in `.env`
+5. Open `http://127.0.0.1:8000/outbound`, sign in, upload a CSV, and start calls
+
+CSV columns — `phone` (required), plus optional `name`, `email`, `property_id`, `budget`, `area`, `notes`. Sample: `data/sample_outbound_leads.csv`. Indian 10-digit numbers are auto-normalized to `+91...`.
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/outbound/status` | Config check |
+| `GET` | `/api/outbound/setup-kit` | Outbound prompt + tools JSON |
+| `POST` | `/api/outbound/parse-csv` | Upload CSV → preview leads |
+| `POST` | `/api/outbound/campaigns` | Submit batch to ElevenLabs |
+| `GET` | `/api/outbound/campaigns` | List campaigns |
+| `POST` | `/api/outbound/campaigns/{id}/refresh` | Sync status from ElevenLabs |
+| `POST` | `/api/outbound/campaigns/{id}/cancel` | Cancel batch |
+
+Full guide: `docs/OUTBOUND_SETUP.md`. Only call leads who consented to contact (TRAI DND / TCPA).
 
 ## Project structure
 
 ```
 app/
-  main.py                    # FastAPI app
-  config.py                  # Settings from .env
+  main.py                 # FastAPI app
+  config.py               # Settings from .env
   routes/
-    auth.py, oauth.py        # JWT + social login
-    session.py               # OpenAI Realtime WebRTC session
-    tools.py                 # Browser tool API
-    telephony.py             # ElevenLabs webhook tools
-    twilio.py                # Optional Twilio status / fallback
+    session.py            # OpenAI Realtime session token
+    tools.py              # Calendar tool endpoints (browser)
+    telephony.py          # ElevenLabs webhook tools (phone)
+    twilio.py             # Optional Twilio status / fallback
+    outbound.py           # Outbound campaigns (CSV → batch calling)
   services/
-    openai_session.py        # Sara instructions + Realtime tools
-    knowledge_base.py        # Property search
-    calendar_service.py      # Availability + booking
-    tool_executor.py         # Shared tool logic (browser + phone)
-    elevenlabs_service.py    # Setup kit export
-    booking_email.py         # Gmail confirmations
-data/
-  karyan_knowledge_base.json
-  elevenlabs_setup_kit.json  # Generated — paste into ElevenLabs
-frontend/                    # Next.js UI
-docs/
-  ELEVENLABS_CONNECT.md      # Phone setup (main guide)
-  DEPLOY.md                  # Permanent public URL
-  PUBLIC_URL_SETUP.md        # Local tunnels
+    calendar_service.py   # Availability + booking logic
+    booking_email.py      # Gmail confirmation emails
+    google_auth.py        # Google OAuth
+    knowledge_base.py     # Property search + company info
+    openai_session.py     # Agent instructions + tools
+    elevenlabs_service.py # ElevenLabs tool/webhook definitions
+    elevenlabs_outbound.py# ElevenLabs batch calling client
+    outbound_prompt.py    # Outbound Sara prompt
+    outbound_service.py   # CSV parsing + campaign storage
+static/
+  index.html              # Voice test UI
+  app.js                  # WebRTC + tool handling
+  style.css
+  outbound.html           # Outbound campaigns UI
 scripts/
-  setup_google_auth.py
-  export_elevenlabs_setup.py
-  pack_google_token.py       # Cloud deploy helper
+  setup_google_auth.py            # One-time Google auth
+  export_elevenlabs_setup.py      # Inbound ElevenLabs setup kit
+  export_elevenlabs_outbound_setup.py  # Outbound ElevenLabs setup kit
+data/
+  karyan_knowledge_base.json      # NCR listings
+  elevenlabs_setup_kit.json       # Generated — paste into ElevenLabs
+  sample_outbound_leads.csv       # Sample outbound leads
+docs/
+  OUTBOUND_SETUP.md               # Outbound calling guide
 ```
-
----
-
-## Environment variables
-
-| Variable | Required | Purpose |
-|----------|----------|---------|
-| `OPENAI_API_KEY` | Yes | Browser Realtime agent |
-| `ORGANIZER_NAME` | No | Agent name (default Sara) |
-| `COMPANY_NAME` | No | Branding |
-| `JWT_SECRET` | Yes (prod) | Auth tokens |
-| `FRONTEND_URL` | No | OAuth redirects, CORS |
-| `API_PUBLIC_URL` | Phone | Base URL for ElevenLabs tool webhooks |
-| `TELEPHONY_WEBHOOK_SECRET` | Phone | Bearer token for `/api/telephony/tools/*` |
-| `GOOGLE_TOKEN_JSON` | Cloud | One-line token for deploy (see `pack_google_token.py`) |
-| `TWILIO_*` | Optional | Reference; primary use is ElevenLabs import |
-| `ELEVENLABS_API_KEY` | Optional | `/api/telephony/voices` helper only |
-
-See [`.env.example`](.env.example) for the full list.
-
----
-
-## API endpoints
-
-| Endpoint | Auth | Description |
-|----------|------|-------------|
-| `GET /api/health` | No | Health check |
-| `POST /api/session` | JWT | OpenAI Realtime SDP exchange |
-| `POST /api/tools/*` | No | Browser agent tools |
-| `POST /api/telephony/tools/{name}` | Bearer | ElevenLabs phone tools |
-| `GET /api/telephony/setup-kit` | No | Prompt + tool URLs for ElevenLabs |
-
----
 
 ## Troubleshooting
 
-| Issue | Fix |
-|-------|-----|
-| Realtime / SDP errors | Check `OPENAI_API_KEY`, model `gpt-realtime` in `.env` |
-| Calendar / booking fails | Run `python scripts/setup_google_auth.py`; approve Gmail scope |
-| Phone tools return 401 | Match `TELEPHONY_WEBHOOK_SECRET` in `.env` and ElevenLabs tool header |
-| Phone tools timeout | Backend down or public URL unreachable |
-| Sara speaks Hindi (browser) | Instructions enforce English; start a new session |
-| No confirmation email | Re-run `setup_google_auth.py` with Gmail permission |
-
----
-
-## License
-
-Private / project use.
+- **Missing credentials.json** — download OAuth client JSON from Google Cloud Console (Desktop app type works for local auth).
+- **Calendar 403** — ensure Calendar API is enabled and you completed `setup_google_auth.py`.
+- **Realtime session fails** — confirm your OpenAI key has access to the Realtime model in `.env`.
+- **No audio** — use Chrome/Edge, allow mic permissions, and use HTTPS or localhost.
+- **Phone tools return 401** — match `TELEPHONY_WEBHOOK_SECRET` in `.env` and the ElevenLabs tool header.
+- **Phone tools timeout** — backend down or `API_PUBLIC_URL` unreachable.
+- **Outbound not configured** — set `ELEVENLABS_API_KEY`, `ELEVENLABS_OUTBOUND_AGENT_ID`, and `ELEVENLABS_PHONE_NUMBER_ID` in `.env`.
