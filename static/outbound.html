@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Outbound campaigns — Karyan</title>
+  <style>
+    :root { --accent: #ff3c00; --bg: #030303; --card: #111; --text: #eee; --muted: #888; }
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 2rem; }
+    h1 { font-size: 1.5rem; }
+    .card { background: var(--card); border: 1px solid #222; border-radius: 12px; padding: 1.25rem; margin: 1rem 0; max-width: 720px; }
+    label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.35rem; }
+    input, button { font: inherit; }
+    input[type=text], input[type=password], input[type=email] { width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid #333; background: #0a0a0a; color: var(--text); margin-bottom: 0.75rem; }
+    button { background: var(--accent); color: #fff; border: none; padding: 0.65rem 1.2rem; border-radius: 999px; cursor: pointer; font-weight: 600; }
+    button.secondary { background: transparent; border: 1px solid #444; color: var(--text); }
+    pre { background: #0a0a0a; padding: 1rem; border-radius: 8px; overflow: auto; font-size: 0.8rem; }
+    .status { color: var(--muted); font-size: 0.9rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th, td { text-align: left; padding: 0.5rem; border-bottom: 1px solid #222; }
+    .ok { color: #4ade80; }
+    .warn { color: #fbbf24; }
+  </style>
+</head>
+<body>
+  <h1>Outbound campaigns</h1>
+  <p class="status">ElevenLabs batch calling · CSV lead upload</p>
+
+  <div class="card" id="login-card">
+    <h2>Sign in</h2>
+    <label>Email</label>
+    <input type="email" id="email" />
+    <label>Password</label>
+    <input type="password" id="password" />
+    <button onclick="login()">Login</button>
+    <p class="status" id="login-msg"></p>
+  </div>
+
+  <div class="card" id="app-card" style="display:none">
+    <p id="config-status" class="status"></p>
+    <h2>Upload leads CSV</h2>
+    <p class="status">Columns: phone (required), name, email, property_id, budget, area, notes</p>
+    <input type="file" id="csv" accept=".csv" />
+    <br /><br />
+    <label>Campaign name</label>
+    <input type="text" id="campaign-name" value="Karyan lead follow-up" />
+    <br />
+    <button onclick="parseCsv()">Preview CSV</button>
+    <button class="secondary" onclick="submitCampaign()">Start batch calls</button>
+    <pre id="preview"></pre>
+    <h2>Campaigns</h2>
+    <button class="secondary" onclick="loadCampaigns()">Refresh list</button>
+    <div id="campaigns"></div>
+  </div>
+
+  <script>
+    const API = window.location.origin;
+    let token = localStorage.getItem("outbound_token") || "";
+    let leads = [];
+
+    async function api(path, opts = {}) {
+      const headers = { ...(opts.headers || {}) };
+      if (token) headers.Authorization = `Bearer ${token}`;
+      const res = await fetch(API + path, { ...opts, headers });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.detail || res.statusText);
+      return data;
+    }
+
+    async function login() {
+      try {
+        const data = await api("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
+          }),
+        });
+        token = data.access_token;
+        localStorage.setItem("outbound_token", token);
+        document.getElementById("login-card").style.display = "none";
+        document.getElementById("app-card").style.display = "block";
+        await loadStatus();
+        await loadCampaigns();
+      } catch (e) {
+        document.getElementById("login-msg").textContent = e.message;
+      }
+    }
+
+    async function loadStatus() {
+      const s = await api("/api/outbound/status");
+      const el = document.getElementById("config-status");
+      el.innerHTML = s.configured
+        ? `<span class="ok">Outbound configured</span> · caller ${s.caller_id || "—"}`
+        : `<span class="warn">Not configured</span> — set ELEVENLABS_API_KEY, ELEVENLABS_OUTBOUND_AGENT_ID, ELEVENLABS_PHONE_NUMBER_ID in .env`;
+    }
+
+    async function parseCsv() {
+      const file = document.getElementById("csv").files[0];
+      if (!file) return alert("Choose a CSV file");
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch(API + "/api/outbound/parse-csv", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail);
+      leads = data.leads;
+      document.getElementById("preview").textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function submitCampaign() {
+      if (!leads.length) await parseCsv();
+      if (!leads.length) return alert("No leads");
+      const name = document.getElementById("campaign-name").value;
+      const data = await api("/api/outbound/campaigns", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, leads }),
+      });
+      document.getElementById("preview").textContent = JSON.stringify(data, null, 2);
+      await loadCampaigns();
+    }
+
+    async function loadCampaigns() {
+      const data = await api("/api/outbound/campaigns");
+      const rows = data.campaigns.map(c =>
+        `<tr><td>${c.name}</td><td>${c.status}</td><td>${c.recipient_count}</td><td>${c.created_at}</td></tr>`
+      ).join("");
+      document.getElementById("campaigns").innerHTML =
+        `<table><thead><tr><th>Name</th><th>Status</th><th>Leads</th><th>Created</th></tr></thead><tbody>${rows}</tbody></table>`;
+    }
+
+    if (token) {
+      document.getElementById("login-card").style.display = "none";
+      document.getElementById("app-card").style.display = "block";
+      loadStatus().catch(() => localStorage.removeItem("outbound_token"));
+      loadCampaigns().catch(() => {});
+    }
+  </script>
+</body>
+</html>
