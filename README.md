@@ -63,7 +63,7 @@ Example flow:
 
 - "I'd like to book a meeting"
 - Agent asks for your name and email
-- "How about Thursday at 2 PM?"
+- "How about Thursday at 2 PM?" 
 - Agent checks availability, confirms, books, and sends the invite
 
 ## Project structure
