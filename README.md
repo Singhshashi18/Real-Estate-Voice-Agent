@@ -26,7 +26,7 @@ Phase 1 browser voice agent that schedules 30-minute meetings on your Google Cal
 ## Setup
 
 ```bash
-cd INBOUND-AGENT
+cd INBOUND-AGENT 
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
