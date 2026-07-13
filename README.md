@@ -5,7 +5,7 @@
 <img width="1253" height="640" alt="image" src="https://github.com/user-attachments/assets/cbc340d4-5cfe-4174-a434-564363f7fce3" />
 <img width="1269" height="587" alt="image" src="https://github.com/user-attachments/assets/5aca08b1-92d8-471a-9680-77129be60357" />
 
-
+ 
 
 AI voice receptionist **Sara** for **Karyan Realty** (NCR). Sara helps callers find properties, answers questions, and books 30-minute site visits on Google Calendar with **Google Meet** invites — over the **browser** and over the **phone**.
 
