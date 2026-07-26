@@ -25,7 +25,7 @@ No LangChain / LangGraph — OpenAI Realtime (browser) + ElevenLabs Conversation
 
 1. Voice conversation in the browser (OpenAI Realtime API) or over the phone (ElevenLabs)
 2. Searches the Karyan knowledge base (property, budget in lakh/crore, BHK, NCR areas)
-3. Collects caller **name** and **email**
+3. Collects caller **name** and **email** 
 4. Checks your Google Calendar availability (Mon–Fri, 9 AM–9 PM IST, up to 14 days ahead)
 5. Books the meeting and emails a **Google Calendar invite** with **Google Meet**
 6. **Outbound:** follows up on property leads via ElevenLabs batch calling (CSV upload)
