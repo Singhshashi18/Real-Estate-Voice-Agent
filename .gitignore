@@ -1,4 +1,3 @@
-.env
 credentials.json
 token.json
 users.db
@@ -18,3 +17,5 @@ frontend/.vercel/
 frontend/.env*
 frontend/*.tsbuildinfo
 frontend/next-env.d.ts
+config.bat
+node_modules
