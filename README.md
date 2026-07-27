@@ -7,7 +7,7 @@
 
  
 
-AI voice receptionist **Sara** for **Karyan Realty** (NCR). Sara helps callers find properties, answers questions, and books 30-minute site visits on Google Calendar with **Google Meet** invites — over the **browser** and over the **phone**.
+AI voice receptionist **Sara** for **Karyan Realty** (NCR). Sara helps callers find properties, answers questions, and books 30-minute site visits on Google Calendar with **Google Meet** invites.
 
 ## Channels
 
@@ -17,7 +17,7 @@ AI voice receptionist **Sara** for **Karyan Realty** (NCR). Sara helps callers f
 | **Phone (inbound)** | ElevenLabs (voice you pick) | Twilio number → ElevenLabs agent → backend webhooks |
 | **Phone (outbound)** | ElevenLabs (Sara, outbound persona) | CSV leads → ElevenLabs batch calling → Twilio |
 
-> **Live number:** `+1 (661) 486-4467` is provisioned and **attached to the agent**. Inbound calls route through Twilio (`voice_url → https://api.us.elevenlabs.io/twilio/inbound_call`) to the ElevenLabs Conversational AI agent, and the same number is used as caller ID for outbound follow-up calls. Status: `in-use` (voice + SMS enabled).
+> **Live number:** `+1 (661) 486-4467` is provisioned and **attached to the agent**. Inbound calls route through Twilio (`voice_url → https://api.us.elevenlabs.io/twilio/inbound_call`) to the ElevenLabs agent.
 
 No LangChain / LangGraph — OpenAI Realtime (browser) + ElevenLabs Conversational AI (phone), with plain Python tool services.
 
@@ -46,3 +46,12 @@ cd INBOUND-AGENT
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
+```
+
+## Quick Start
+
+Run these commands to launch the backend service after setup:
+
+```bash
+python app.py
+```
